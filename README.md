@@ -18,4 +18,3 @@ both have features like,
 * register those events by voucher code
 
 
-developed in 2nd year of btech
