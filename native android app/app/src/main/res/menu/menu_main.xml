@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.csi.sanketbhimani.myapplication.MainActivity">
+    <item
+        android:id="@+id/edit_details"
+        android:orderInCategory="100"
+        android:title="Edit details"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/show_registered_events"
+        android:orderInCategory="100"
+        android:title="Registered events"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/clear_app_data"
+        android:orderInCategory="100"
+        android:title="Clear data"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/log_out"
+        android:orderInCategory="100"
+        android:title="log out"
+        app:showAsAction="never" />
+</menu>

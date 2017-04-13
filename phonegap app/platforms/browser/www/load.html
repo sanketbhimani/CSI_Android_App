@@ -1,0 +1,138 @@
+<html>
+
+<head>
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<script type="text/javascript" src="materialize/js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+	<script type="text/javascript" src="materialize/js/string.js"></script>
+	<script type="text/javascript" src="cordova.js"></script>
+</head>
+
+<body>
+	<div id="loader" class="center" style="top:42%;left:42%;position:absolute;">
+		<div class="preloader-wrapper big active">
+			<div class="spinner-layer spinner-blue-only">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		function errorHandler() {
+			alert("ERORR");
+		}
+
+		function read_file(callback) {
+			var read_data = null;
+			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+				fs.root.getFile("local_data.txt", {
+					create: true,
+					exclusive: false
+				}, function (fileEntry) {
+					fileEntry.file(function (file) {
+						var reader = new FileReader();
+						reader.onloadend = function () {
+							read_data = this.result;
+							//alert(read_data);
+							callback(read_data);
+						};
+						reader.readAsText(file);
+					}, errorHandler);
+				}, errorHandler);
+			}, errorHandler);
+		}
+
+		function write_file(data) {
+			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+				fs.root.getFile("local_data.txt", {
+					create: true,
+					exclusive: false
+				}, function (fileEntry) {
+					fileEntry.createWriter(function (fileWriter) {
+						fileWriter.onwriteend = function () {};
+						fileWriter.onerror = function (e) {
+							console.log("Failed file write: " + e.toString());
+						};
+						fileWriter.write(data);
+					});
+				}, errorHandler);
+			}, errorHandler);
+		}
+
+		function reload() {
+			//localStorage.clear();
+			$("#main").hide();
+			$("#loader").show();
+			$.ajax({
+				url: "http://localhost/CSI_ANDROID_APP_SERVER/gettotalid.php",
+				success: function (response) {
+					a = JSON.parse(response);
+					var event_ids;
+					var cnt = parseInt(a.event.total_event);
+					//alert("sadassa");
+					read_file(function (d) {
+						//alert(d);
+						data_j = JSON.parse(d);
+						while (cnt > 0) {
+							event[cnt] = a.event["" + cnt];
+							if (data_j["event_" + event[cnt]] != "yes") {
+								$.ajax({
+									url: "http://localhost/CSI_ANDROID_APP_SERVER/getbyid.php?id=" + event[cnt] + "",
+									success: function (r) {
+										b = JSON.parse(r);
+										if (b.event.validEvent == "yes") {
+											data_j["event_" + b.event.eventid] = "yes";
+											data_j["event" + b.event.eventid + "_name"] = b.event.name;
+											data_j["event" + b.event.eventid + "_text"] = b.event.text;
+											data_j["event" + b.event.eventid + "_date"] = b.event.date;
+											data_j["event" + b.event.eventid + "_time"] = b.event.time;
+											data_j["event" + b.event.eventid + "_venue"] = b.event.venue;
+											data_j["event" + b.event.eventid + "_contact"] = b.event.contact;
+											data_j["event" + b.event.eventid + "_fee"] = b.event.fee;
+											data_j["event" + b.event.eventid + "_selected"] = "no";
+											//alert(data_j.event_id+"pela");
+											if (data_j.events_id == "") {
+												data_j.events_id = b.event.eventid;
+											} else {
+												data_j.events_id += "," + b.event.eventid;
+											}
+											//alert(data_j.events_id+"pachhi");
+										}
+										write_file(JSON.stringify(data_j));
+									}
+								});
+							}
+							cnt--;
+						}
+					});
+					//load();
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					//alert(textStatus);
+					//load();
+				}
+				
+			});
+		}
+		document.addEventListener("deviceready", function () {
+		document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false );
+			reload();
+			setTimeout(function(){ window.location.href = "home.html"; }, 6000);
+			
+		});
+		
+	</script>
+</body>
+
+</html>

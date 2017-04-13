@@ -1,0 +1,68 @@
+<html>
+
+<head>
+	<script type="text/javascript" src="cordova.js"></script>
+	<script src="materialize/dist/sweetalert.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="materialize/dist/sweetalert.css"> </head>
+
+<body>
+	<script>
+		function clearFile(fileName) {
+			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSystem) {
+				fileSystem.root.getFile(fileName, {
+					create: false,
+					exclusive: false
+				}, clearfileExists, fileDoesNotExist);
+			}, getFSFail);
+		}
+
+		function clearfileExists(fileEntry) {
+			console.log("File " + fileEntry.fullPath + " exists!");
+			fileEntry.createWriter(truncateFile, fileDoesNotExist);
+		}
+
+		function truncateFile(writer) {
+			console.log("truncate");
+			writer.onwriteend = function (evt) {
+				//LOG("write");
+				writer.seek(0);
+				writer.onwriteend = function (evt) {
+				swal({
+  title: "Done!",
+  text: "You successfully loged out",
+  type: "success",
+  showCancelButton: false,
+  confirmButtonText: "OK",
+  closeOnConfirm: false
+},
+function(){
+  window.location.href = "index.html";
+});
+				
+				
+				}
+			}
+			writer.truncate(0);
+		}
+
+		function fileDoesNotExist() {
+			console.log("file does not exist");
+		}
+
+		function getFSFail(evt) {
+			console.log(evt.target.error.code);
+		}
+		document.addEventListener("deviceready", function () {
+		document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false );
+			clearFile("local_data.txt");
+			setTimeout(function () {
+				window.location.href = "index.html";
+			}, 3000);
+		});
+
+	</script>
+</body>
+
+</html>

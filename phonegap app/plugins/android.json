@@ -1,0 +1,85 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-battery-status": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-contacts": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-device-motion": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-media-capture": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-shared-preferences": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-app-preferences": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "in.edelworks.sharedpreferences": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.snkddu.csi"
+        }
+    }
+}

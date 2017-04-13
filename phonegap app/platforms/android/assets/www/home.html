@@ -1,0 +1,178 @@
+<html>
+
+<head>
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<script type="text/javascript" src="materialize/js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+	<script type="text/javascript" src="materialize/js/string.js"></script>
+	<script type="text/javascript" src="cordova.js"></script>
+</head>
+
+<body>
+	<div id="main">
+		<ul id="slide-out" class="side-nav">
+			<li>
+				<div class="userView">
+					<div class="background red lighten-1"> </div>
+					<a href="#!user"><img class="circle" src="materialize/img/csi_logo.jpg"> </a> <a href="#!name"><span class="white-text name" id="name">User Name</span></a> <a href="#!email"><span class="white-text email" id="email">user.email@domain.com</span></a>
+					<script>
+						function errorHandler() {
+							alert("ERORR");
+						}
+
+						function read_file(callback) {
+							var read_data = null;
+							window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+								fs.root.getFile("local_data.txt", {
+									create: true,
+									exclusive: false
+								}, function (fileEntry) {
+									fileEntry.file(function (file) {
+										var reader = new FileReader();
+										reader.onloadend = function () {
+											read_data = this.result;
+											//alert(read_data);
+											callback(read_data);
+										};
+										reader.readAsText(file);
+									}, errorHandler);
+								}, errorHandler);
+							}, errorHandler);
+						}
+
+						function write_file(data) {
+							//alert("11");
+							window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+								fs.root.getFile("local_data.txt", {
+									create: true,
+									exclusive: false
+								}, function (fileEntry) {
+									//alert("12");
+									fileEntry.createWriter(function (fileWriter) {
+										//	alert("13");
+										fileWriter.onwriteend = function () {};
+										fileWriter.onerror = function (e) {
+											//	alert("14");
+											console.log("Failed file write: " + e.toString());
+										};
+										fileWriter.write(data);
+									});
+								}, errorHandler);
+							}, errorHandler);
+						}
+
+					</script>
+				</div>
+			</li>
+			<li><a href="load.html"><i class="material-icons">autorenew</i>Reload All Events</a> </li>
+			<li><a href="home.html"><i class="material-icons">extension</i>All Events</a> </li>
+			<li><a href="my_events.html"><i class="material-icons">pets</i>My Events</a> </li>
+			<li><a href="about_csi.html"><i class="material-icons">games</i>About CSI</a> </li>
+			<li><a href="about_ddu.html"><i class="material-icons">account_balance</i>About DDU</a> </li>
+			<li><a href="logout.html"><i class="material-icons">delete</i>Logout</a> </li>
+		</ul>
+		<nav class="red lighten-1"> <a href="#" data-activates="slide-out" class="button-collapse" style="position:absolute;"><i class="material-icons">menu</i></a>
+			<div class="nav-wrapper center"> <span style="font-size:1.5em;">Events</span> </div>
+		</nav>
+		<script>
+			$('.button-collapse').sideNav({
+				menuWidth: 300, // Default is 240
+				edge: 'left', // Choose the horizontal origin
+				closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+				draggable: true // Choose whether you can drag to open on touch screens
+			});
+
+		</script>
+		<!--Import jQuery before materialize.js-->
+		<div class="container">
+			<ul class="collapsible popout" data-collapsible="accordion" id="list"> </ul>
+			<script>
+				$(document).ready(function () {
+					$('.collapsible').collapsible();
+				});
+
+			</script>
+		</div>
+	</div>
+	<div id="loader" class="center" style="top:42%;left:42%;position:absolute;">
+		<div class="preloader-wrapper big active">
+			<div class="spinner-layer spinner-blue-only">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		function load() {
+			read_file(function (d) {
+				//alert(d);
+				d_j = JSON.parse(d);
+				$("#name").html(d_j.user_name);
+				$("#email").html(d_j.user_email);
+				// alert("hflkjashlkahsjkah");
+				var _string = ' <li>      <div class="collapsible-header" id="name">{0}</div>      <div class="collapsible-body">	  <p class="flow-text center" id="short_description">{1}	  </p>	  <table class="striped">	  <tr>	  <td class="center">Date &Time:</td>	  <td class="center" id="time">{2}</td>	  </tr>	  <tr>	  <td class="center">Fees:</td>	  <td class="center" id="fee">{3}</td>	  </tr>	  	  </table>	  <div class="row center">	  <div class="col s6"><a class="waves-effect waves-light btn" onclick="more({4})">More</a></div>	   <divclass="col s6">{5}</div>	  </div>	  </div>    </li>';
+				var ids = d_j.events_id;
+				//alert(ids);
+				//while(ids==null){
+				//}
+				ids.split(",").forEach(function (item, index) {
+					//alert(item);
+					var btn_str = '<a class="waves-effect waves-light btn" onclick="{0}">{1}</a>';
+					var gen_btn = null;
+					var name = d_j["event" + item + "_name"];
+					if (d_j["event" + item + "_selected"] == "yes") {
+						gen_btn = String.format(btn_str, "recipt(" + item + ")", "View Recipt");
+						name += "<span class='new badge' data-badge-caption='selected'></span>"
+					} else {
+						gen_btn = String.format(btn_str, "im_in(" + item + ")", "i'm in");
+					}
+					var text = d_j["event" + item + "_text"];
+					var date = d_j["event" + item + "_date"];
+					var time = d_j["event" + item + "_time"];
+					var venue = d_j["event" + item + "_venue"];
+					var contact = d_j["event" + item + "_contact"];
+					var selected = d_j["event" + item + "_selected"];
+					var fee = d_j["event" + item + "_fee"];
+					//alert(name+text+date+time+fee+item);
+					$("#list").html($("#list").html() + String.format(_string, name, text, date + " " + time, fee, item, gen_btn));
+				});
+				$("#main").show();
+				$("#loader").hide();
+			});
+		}
+
+		function more(item) {
+			localStorage.setItem("tmp_var", item);
+			window.location.href = "more.html";
+		}
+
+		function recipt(item) {
+			localStorage.setItem("tmp_var_recipt", item);
+			window.location.href = "recipt.html";
+		}
+
+		function im_in(item) {
+				localStorage.setItem("tmp_var_imin", item);
+				window.location.href = "im_in.html";
+			}
+			//setTimeout(function(){ load(); }, 6000);
+		document.addEventListener("deviceready", function () {
+		document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false );
+			load();
+		});
+
+	</script>
+</body>
+
+</html>
